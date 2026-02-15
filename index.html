@@ -145,7 +145,7 @@ button {
 
   <p style="margin-bottom:12px;">
     This short knowledge check reinforces how IDMT rules operate in practice,
-    including selection criteria, actions, testing, audit and shared service considerations.
+    including data removal, testing, audit and governance.
   </p>
 
   <p style="margin-bottom:20px;">
@@ -168,151 +168,177 @@ const quizData = [
 {
 question:"What is the primary purpose of IDMT?",
 options:[
-"To run system backups",
-"To automatically update, insert or correct data using defined rules",
-"To replace Core Services scheduling",
-"To send automated emails"
+"To automatically remove or cleanse data using defined rules",
+"To insert new case records",
+"To schedule background services",
+"To send automated notifications"
 ],
-correct:1,
-explanation:"IDMT allows you to create controlled rules that update, insert or correct data within Uniform. It is designed to manage data quality and consistency across modules in a structured way."
+correct:0,
+explanation:"IDMT is primarily used to remove or cleanse existing data in a controlled way. It can leave a field blank, apply the default value Data Removed, or use a defined replacement text to indicate that data previously existed."
 },
 
 {
 question:"What must a rule contain before it can run?",
 options:[
 "An audit export",
-"A sweep clause",
 "Selection criteria and at least one action",
-"A DMS link"
+"A DMS link",
+"A scheduled service"
 ],
-correct:2,
-explanation:"A rule requires selection criteria to identify records and at least one action to define what change will occur. Without both elements, the rule has nothing to process."
+correct:1,
+explanation:"A rule must include selection criteria to identify which records are targeted and at least one action to define what change will occur. Without both elements, the rule has nothing to process."
 },
 
 {
 question:"What is the purpose of running a Test before running a Rule?",
 options:[
 "To permanently update records",
+"To improve processing speed",
 "To preview which records will be affected without applying changes",
-"To delete invalid data",
-"To improve performance"
+"To delete invalid rules"
 ],
-correct:1,
-explanation:"A Test run allows you to review which records meet the criteria before any updates are applied. This helps validate logic and reduces the risk of unintended data changes."
+correct:2,
+explanation:"A Test run allows you to review which records meet the criteria before any changes are applied. This confirms your logic is correct and reduces the risk of unintended data removal."
 },
 
 {
-question:"If a rule is left in Running status for an extended period, what should you check first?",
+question:"If selection criteria are too broad, what is the likely outcome?",
 options:[
-"The email server",
-"Whether the rule is processing a large dataset",
-"User permissions",
-"DMS configuration"
+"The rule will fail automatically",
+"More records than intended may be affected",
+"The audit will be disabled",
+"The rule deletes itself"
 ],
 correct:1,
-explanation:"Large datasets can extend processing time. Always confirm whether the rule is still actively processing before assuming there is a system issue."
+explanation:"Broad selection criteria increase the number of matched records. This may result in removing data from more records than intended."
+},
+
+{
+question:"When removing data using IDMT, what replacement options are available?",
+options:[
+"Insert a new case reference only",
+"Replace with system generated audit ID",
+"Leave blank, use default Data Removed, or define your own replacement text",
+"Automatically archive the field"
+],
+correct:2,
+explanation:"When data is removed, the field can be left blank, populated with the default text Data Removed, or replaced with a defined value."
 },
 
 {
 question:"Why is the Audit feature important in IDMT?",
 options:[
-"It improves rule speed",
+"It increases rule performance",
 "It records who made changes and what was changed",
-"It prevents users accessing rules",
-"It deletes old rules"
+"It blocks unauthorised users",
+"It reduces database size"
 ],
 correct:1,
-explanation:"The Audit feature provides traceability. It records what data was changed, when it changed and which rule applied the update, supporting accountability and troubleshooting."
+explanation:"The Audit feature records what changes were made, when they were made, and which rule applied them."
 },
 
 {
 question:"In a Shared Services environment, what must be carefully configured?",
 options:[
-"The server clock",
 "The rule scope and authority filters",
-"The HTML format",
-"The report layout"
+"The email template",
+"The HTML output format",
+"The server time zone"
 ],
-correct:1,
-explanation:"In Shared Services, rules must be scoped correctly using authority filters to ensure changes apply only to the intended authority and do not affect other councils."
-},
-
-{
-question:"What happens if selection criteria are too broad?",
-options:[
-"The rule will not run",
-"More records than intended may be updated",
-"The rule deletes itself",
-"The system blocks the rule"
-],
-correct:1,
-explanation:"Broad criteria increase the number of matched records. This can result in unintended updates, which is why testing and careful filtering are critical."
-},
-
-{
-question:"Why should rules be clearly named and documented?",
-options:[
-"To make them run faster",
-"To avoid duplicate system tables",
-"To support governance and future review",
-"To enable DMS integration"
-],
-correct:2,
-explanation:"Clear naming and documentation support governance, maintenance and audit. Other administrators must be able to understand the purpose and impact of each rule."
+correct:0,
+explanation:"In Shared Services, rules must be scoped correctly so they only affect the intended authority."
 },
 
 {
 question:"What is the risk of running a rule without testing first?",
 options:[
 "It cannot be audited",
-"It may apply unintended changes to live data",
+"It may apply unintended data removal to live records",
 "It disables the module",
-"It blocks user access"
+"It blocks user login"
 ],
 correct:1,
-explanation:"Running a rule without testing increases the risk of applying incorrect logic to live records. A Test run helps confirm that only the intended records are targeted."
+explanation:"Running a rule without testing increases the risk of removing data from records that were not intended to be affected."
 },
 
 {
-question:"Why might a rule return zero results during testing?",
+question:"Why might a Test return zero results?",
 options:[
 "The database is offline",
 "The criteria do not match any current records",
-"The audit table is full",
-"The user is not logged in"
+"The rule is corrupted",
+"The audit table is full"
 ],
 correct:1,
-explanation:"If no records meet the selection criteria, the Test will return zero results. This usually indicates criteria need reviewing rather than a system error."
+explanation:"If no records meet the selection criteria, the Test will return zero results."
 },
 
 {
-question:"What is best practice after running a rule successfully?",
+question:"What is best practice after successfully running a rule?",
 options:[
 "Immediately delete the rule",
-"Document the outcome and review audit results",
+"Restart the server",
 "Disable all other rules",
-"Restart the server"
+"Review the audit output and document the outcome"
 ],
-correct:1,
-explanation:"After running a rule, review the audit output and document the result. This ensures the change achieved the intended outcome and supports governance processes."
+correct:3,
+explanation:"After running a rule, review the audit results and document what was changed."
 },
 
 {
-question:"When should IDMT be used instead of manual updates?",
+question:"If a rule appears stuck in Running status, what should you consider first?",
 options:[
-"When changes affect multiple records and require consistency",
-"For formatting HTML emails",
-"For one off personal tasks",
-"To change user passwords"
+"Whether it is processing a large volume of records",
+"That the system has crashed",
+"That the audit failed",
+"That DMS is offline"
 ],
 correct:0,
-explanation:"IDMT is designed for structured, repeatable updates across multiple records. It ensures consistency and reduces manual error when applying controlled data changes."
+explanation:"Large datasets can increase processing time. Confirm whether the rule is still actively processing."
+},
+
+{
+question:"Why should rules be clearly named and documented?",
+options:[
+"To improve performance",
+"To support governance and future review",
+"To allow automatic scheduling",
+"To reduce audit entries"
+],
+correct:1,
+explanation:"Clear naming and documentation ensure administrators understand the purpose and impact of each rule."
+},
+
+{
+question:"When is IDMT most appropriate to use?",
+options:[
+"For formatting HTML content",
+"For one off personal changes",
+"When removing or cleansing data across multiple records",
+"For resetting user passwords"
+],
+correct:2,
+explanation:"IDMT is most appropriate when removing or cleansing data consistently across multiple records."
+},
+
+{
+question:"What happens when a rule is run live after testing?",
+options:[
+"The system schedules it automatically",
+"The selected records are permanently updated according to the defined action",
+"The audit is cleared",
+"The rule disables itself"
+],
+correct:1,
+explanation:"When run live, the defined action is applied to all records matching the criteria and recorded in the audit trail."
 }
 
 ];
 
 let current = 0;
 let score = 0;
+
+/* Remaining JS unchanged */
 
 function startQuiz(){
 document.getElementById("intro").style.display = "none";
@@ -381,35 +407,17 @@ r.style.display = "block";
 
 r.innerHTML = `
 <div style="text-align:left; max-width:600px; margin:0 auto;">
-<h2 style="margin-bottom:20px; color:#2a5298;">
-Knowledge Check Complete
-</h2>
-
-<p style="margin-bottom:16px;">
-You’ve reached the end of the IDMT training knowledge check.
-</p>
-
+<h2 style="margin-bottom:20px; color:#2a5298;">Knowledge Check Complete</h2>
+<p style="margin-bottom:16px;">You’ve reached the end of the IDMT training knowledge check.</p>
 <div style="width:100%; text-align:center; margin:24px 0;">
-<div class="score" style="display:inline-block;">
-${score} out of ${quizData.length}
+<div class="score" style="display:inline-block;">${score} out of ${quizData.length}</div>
 </div>
-</div>
-
-<p style="margin-bottom:16px;">
-This score reinforces your understanding of IDMT rule creation, testing, audit and governance.
-</p>
-
-<p style="margin-bottom:24px;">
-If any areas were unclear, revisit the relevant sections of the IDMT training materials.
-</p>
-
+<p style="margin-bottom:16px;">This score reinforces your understanding of IDMT data removal, testing and governance.</p>
+<p style="margin-bottom:24px;">If any areas were unclear, revisit the relevant sections of the training materials.</p>
 <p style="margin-bottom:10px; font-size:1.6em; font-weight:700; color:#2a5298;">
 Thank you for attending Idox training
 </p>
-
-<p style="margin-bottom:0;">
-If you’d like to explore further training courses, please speak to your Idox account manager.
-</p>
+<p>If you’d like to explore further training courses, please speak to your Idox account manager.</p>
 </div>
 `;
 }
